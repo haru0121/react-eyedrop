@@ -5,7 +5,7 @@ import { elementToCanvas } from './elementToCanvas'
 
 const html2canvas = _html2canvas as any as (element: HTMLElement, options?: Partial<_html2canvas.Options>) => Promise<HTMLCanvasElement>;
 
-export const targetToCanvas = async (_target: HTMLElement): Promise<{
+export const targetToCanvas = async (_target: HTMLElement,isCORS?:boolean): Promise<{
   targetCanvas: HTMLCanvasElement,
   targetPickXOffset: number,
   targetPickYOffset: number
@@ -59,7 +59,7 @@ export const targetToCanvas = async (_target: HTMLElement): Promise<{
   }
 
   // Make sure to have 1:1 scale so that it will pick correct color
-  const targetCanvas = await html2canvas(target, { logging: false, scale: 1 });
+  const targetCanvas = await html2canvas(target, { logging: false, scale: 1, useCORS: isCORS });
   return {
     targetCanvas,
     targetPickXOffset,

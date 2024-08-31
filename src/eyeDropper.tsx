@@ -31,6 +31,7 @@ type Props = {
   buttonClasses?: string,
   customComponent?: React.FC<any>,
   once?: boolean,
+  isCORS?: boolean,
   cursorActive?: string,
   cursorInactive?: string,
   cursorAwait?: string,
@@ -53,6 +54,7 @@ export const EyeDropper = (props: Props) => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const {
     once = true,
+      isCORS = false,
     pickRadius = 0,
     onInit,
     cursorActive = 'copy',
@@ -132,7 +134,7 @@ export const EyeDropper = (props: Props) => {
     // Add onextract callback for awaiting rendering purpose
     if (onExtractColor) { onExtractColor(); }
 
-    const {targetCanvas, targetPickXOffset, targetPickYOffset} = await targetToCanvas(target as HTMLElement)
+    const {targetCanvas, targetPickXOffset, targetPickYOffset} = await targetToCanvas(target as HTMLElement,isCORS);
     const rgbColor = getColor(
       targetCanvas,
       e.offsetX + targetPickXOffset,
@@ -146,7 +148,7 @@ export const EyeDropper = (props: Props) => {
     }
 
     once && deactivateColorPicking();
-  }, [deactivateColorPicking, once, pickRadius, updateColors]);
+  }, [deactivateColorPicking, once,isCORS, pickRadius, updateColors]);
 
   useEffect(() => {
     onInit && onInit();
