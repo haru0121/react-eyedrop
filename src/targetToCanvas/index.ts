@@ -1,11 +1,10 @@
 import { imageToCanvas } from './imageToCanvas'
 import * as _html2canvas from 'html2canvas'
 import { TARGET_NOT_HTML_ELEMENT_ERROR } from '../constants/errors'
-import { elementToCanvas } from './elementToCanvas'
 
 const html2canvas = _html2canvas as any as (element: HTMLElement, options?: Partial<_html2canvas.Options>) => Promise<HTMLCanvasElement>;
 
-export const targetToCanvas = async (_target: HTMLElement,isCORS?:boolean): Promise<{
+export const targetToCanvas = async (_target: HTMLElement,isCORS?:boolean,proxy?:string): Promise<{
   targetCanvas: HTMLCanvasElement,
   targetPickXOffset: number,
   targetPickYOffset: number
@@ -59,7 +58,15 @@ export const targetToCanvas = async (_target: HTMLElement,isCORS?:boolean): Prom
   }
 
   // Make sure to have 1:1 scale so that it will pick correct color
-  const targetCanvas = await html2canvas(target, { logging: false, scale: 1, useCORS: isCORS });
+  const html2canvasOptions = {
+    scale: 1,
+    useCORS: isCORS,
+    logging: false,
+  } as Partial<_html2canvas.Options>
+  if(proxy){
+    html2canvasOptions.proxy = proxy
+  }
+  const targetCanvas = await html2canvas(target, html2canvasOptions);
   return {
     targetCanvas,
     targetPickXOffset,

@@ -34,7 +34,7 @@ const EyeDropper = (props) => {
     const [colors, setColors] = useState(initialStateColors);
     const [pickingColorFromDocument, setPickingColorFromDocument] = useState(false);
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    const { once = true, isCORS = false, pickRadius = 0, onInit, cursorActive = 'copy', cursorInactive = 'auto', cursorAwait = 'wait', onChange, wrapperClasses, buttonClasses, customComponent: CustomComponent, colorsPassThrough, children, customProps, disabled, onPickStart, onPickEnd, onExtractColor, } = props;
+    const { once = true, isCORS = false, proxy, pickRadius = 0, onInit, cursorActive = 'copy', cursorInactive = 'auto', cursorAwait = 'wait', onChange, wrapperClasses, buttonClasses, customComponent: CustomComponent, colorsPassThrough, children, customProps, disabled, onPickStart, onPickEnd, onExtractColor, } = props;
     const setPickingMode = useCallback(({ isPicking, disableButton, showActiveCursor }) => {
         if (document.body) {
             document.body.style.cursor = showActiveCursor ? cursorActive : cursorInactive;
@@ -86,14 +86,14 @@ const EyeDropper = (props) => {
         if (onExtractColor) {
             onExtractColor();
         }
-        const { targetCanvas, targetPickXOffset, targetPickYOffset } = yield (0, targetToCanvas_1.targetToCanvas)(target, isCORS);
+        const { targetCanvas, targetPickXOffset, targetPickYOffset } = yield (0, targetToCanvas_1.targetToCanvas)(target, isCORS, proxy);
         const rgbColor = (0, getColor_1.getColor)(targetCanvas, e.offsetX + targetPickXOffset, e.offsetY + targetPickYOffset, pickRadius);
         updateColors(rgbColor);
         if (document.body) {
             document.body.style.cursor = cursorInactive;
         }
         once && deactivateColorPicking();
-    }), [deactivateColorPicking, once, isCORS, pickRadius, updateColors]);
+    }), [deactivateColorPicking, once, isCORS, proxy, pickRadius, updateColors]);
     useEffect(() => {
         onInit && onInit();
     }, [onInit]);

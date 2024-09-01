@@ -6,6 +6,7 @@ type Props = {
     buttonClasses?: string;
     customComponent?: React.FC<any>;
     once?: boolean;
+    proxy?: string;
     isCORS?: boolean;
     cursorActive?: string;
     cursorInactive?: string;

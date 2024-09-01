@@ -14,7 +14,7 @@ const imageToCanvas_1 = require("./imageToCanvas");
 const _html2canvas = require("html2canvas");
 const errors_1 = require("../constants/errors");
 const html2canvas = _html2canvas;
-const targetToCanvas = (_target, isCORS) => __awaiter(void 0, void 0, void 0, function* () {
+const targetToCanvas = (_target, isCORS, proxy) => __awaiter(void 0, void 0, void 0, function* () {
     let target = _target;
     // Remember original target element position
     let originalClientTop = target.getBoundingClientRect().top;
@@ -56,7 +56,15 @@ const targetToCanvas = (_target, isCORS) => __awaiter(void 0, void 0, void 0, fu
         };
     }
     // Make sure to have 1:1 scale so that it will pick correct color
-    const targetCanvas = yield html2canvas(target, { logging: false, scale: 1, useCORS: isCORS });
+    const html2canvasOptions = {
+        scale: 1,
+        useCORS: isCORS,
+        logging: false,
+    };
+    if (proxy) {
+        html2canvasOptions.proxy = proxy;
+    }
+    const targetCanvas = yield html2canvas(target, html2canvasOptions);
     return {
         targetCanvas,
         targetPickXOffset,
